@@ -17,21 +17,23 @@ export class NavbarComponent implements OnInit {
 
   translations: Record<string, Record<string, string>> = {
     pt: {
-      catalog: 'Catálogo',
-      cart: 'Carrinho',
+      home: 'Início',
+      catalog: 'Produtos',
+      categories: 'Categorias',
       orders: 'Pedidos',
-      stock: 'Stock',
       login: 'Entrar',
       logout: 'Sair',
+      register: 'Registar',
       profile: 'Perfil'
     },
     en: {
-      catalog: 'Catalog',
-      cart: 'Cart',
+      home: 'Home',
+      catalog: 'Products',
+      categories: 'Categories',
       orders: 'Orders',
-      stock: 'Stock',
-      login: 'Sign In',
+      login: 'Login',
       logout: 'Sign Out',
+      register: 'Register',
       profile: 'Profile'
     }
   };
@@ -42,7 +44,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    const savedLang  = localStorage.getItem('lang') as 'pt' | 'en' | null;
+    const savedLang = localStorage.getItem('lang') as 'pt' | 'en' | null;
     if (savedTheme === 'dark') {
       this.isDarkTheme.set(true);
       document.documentElement.setAttribute('data-theme', 'dark');

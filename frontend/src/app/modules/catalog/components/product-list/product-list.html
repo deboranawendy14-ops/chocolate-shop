@@ -1,27 +1,60 @@
 <div class="catalog">
+
+  <!-- HEADER -->
   <div class="catalog__header">
-    <h1>🍫 {{ t('catalog.title') }}</h1>
-    <p>{{ t('catalog.subtitle') }}</p>
+    <div class="catalog__header-content">
+      <h1>Os Nossos Chocolates</h1>
+      <p>Descubra a nossa selecção de chocolates premium</p>
+    </div>
+    <div class="catalog__search">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      <input type="text" [(ngModel)]="search" placeholder="Pesquisar chocolates..." />
+    </div>
   </div>
 
+  <!-- FILTROS -->
+  <div class="catalog__filters">
+    <button
+      *ngFor="let cat of categories"
+      class="filter-btn"
+      [class.active]="selectedCategory() === cat"
+      (click)="setCategory(cat)">
+      {{ cat }}
+    </button>
+  </div>
+
+  <!-- RESULTADOS -->
+  <p class="catalog__count">{{ filteredProducts.length }} produtos encontrados</p>
+
+  <!-- GRID -->
   <div class="catalog__grid">
-    <div class="product-card" *ngFor="let product of products">
+    <div class="product-card" *ngFor="let product of filteredProducts">
       <div class="product-card__image">
-        <img [src]="product.image" [alt]="product.name" />
+        <img [src]="product.image" [alt]="product.name" [title]="product.name">
         <span class="product-card__badge" *ngIf="product.stock <= 5">Últimas unidades!</span>
       </div>
       <div class="product-card__body">
         <span class="product-card__category">{{ product.category }}</span>
         <h3>{{ product.name }}</h3>
         <p>{{ product.description }}</p>
+        <div class="product-card__rating">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#D3A376"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {{ product.rating }} ({{ product.reviews }})
+        </div>
         <div class="product-card__footer">
-          <span class="product-card__price">$ {{ product.price }}</span>
-          <button class="btn-primary" (click)="addToCart(product)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            Adicionar
+          <span class="product-card__price">€ {{ product.price.toFixed(2) }}</span>
+          <button class="btn-cart" (click)="addToCart(product)" title="Adicionar ao carrinho">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
           </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- VAZIO -->
+  <div class="catalog__empty" *ngIf="filteredProducts.length === 0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+    <p>Nenhum produto encontrado</p>
+  </div>
+
 </div>
