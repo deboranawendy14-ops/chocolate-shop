@@ -1,63 +1,71 @@
 .navbar {
-  background-color: var(--choc-dark);
+  background: var(--choc-dark);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(211,163,118,0.15);
 
   &__container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
-    height: 65px;
+    padding: 0 32px;
+    height: 68px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 32px;
   }
 
   &__logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
-    color: var(--choc-cream);
+    color: var(--choc-ivory);
     white-space: nowrap;
+    letter-spacing: -0.01em;
 
-    &:hover { opacity: 0.85; text-decoration: none; }
+    &-icon { font-size: 24px; }
+    &:hover { opacity: 0.9; }
   }
 
   &__links {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 2px;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    flex: 1;
+    justify-content: center;
 
     a {
-      color: var(--choc-caramel);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,236,178,0.7);
       text-decoration: none;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
-      padding: 6px 14px;
+      padding: 7px 14px;
       border-radius: var(--radius-md);
       transition: all 0.2s ease;
-      position: relative;
+      letter-spacing: 0.01em;
+
+      svg { opacity: 0.8; }
 
       &:hover {
-        background-color: rgba(255,255,255,0.08);
-        color: var(--choc-cream);
-        text-decoration: none;
+        background: rgba(255,255,255,0.08);
+        color: var(--choc-ivory);
+        svg { opacity: 1; }
       }
 
       &.active {
-        background-color: var(--choc-caramel);
-        color: var(--choc-dark);
-        font-weight: 700;
+        background: rgba(211,163,118,0.2);
+        color: var(--choc-caramel);
+        font-weight: 600;
+        svg { opacity: 1; }
       }
     }
 
@@ -66,60 +74,82 @@
       color: white;
       font-size: 10px;
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 1px 6px;
       border-radius: 20px;
-      margin-left: 4px;
     }
   }
 
   &__actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 }
 
 .icon-btn {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-md);
-  padding: 6px 10px;
-  font-size: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  color: var(--choc-ivory);
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
   }
 }
 
-.menu-toggle {
-  display: none;
+.lang-btn {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 7px 12px;
 }
 
-// RESPONSIVO
+.btn-login {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--choc-caramel);
+  color: var(--choc-dark);
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+
+  &:hover {
+    background: #e8b88a;
+    transform: translateY(-1px);
+  }
+}
+
+.menu-toggle { display: none; }
+
 @media (max-width: 768px) {
   .navbar {
     &__links {
       display: none;
       position: absolute;
-      top: 65px;
-      left: 0;
-      right: 0;
-      background-color: var(--choc-dark);
+      top: 68px;
+      left: 0; right: 0;
+      background: var(--choc-dark);
       flex-direction: column;
-      padding: 16px;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      padding: 12px 16px 20px;
+      gap: 4px;
+      border-bottom: 1px solid rgba(211,163,118,0.15);
 
-      &.open {
-        display: flex;
-      }
-
-      a { width: 100%; text-align: center; }
+      &.open { display: flex; }
+      a { width: 100%; justify-content: center; }
     }
   }
-
   .menu-toggle { display: flex; }
 }
