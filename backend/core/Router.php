@@ -20,7 +20,7 @@ class Router {
 
     public function dispatch(): void {
         $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uri    = str_replace('/chocolate-shop/backend', '', $uri);
+        $uri = str_replace('/chocolate-shop/backend/index.php', '', $uri);
         $method = $_SERVER['REQUEST_METHOD'];
 
         foreach ($this->routes as $route) {

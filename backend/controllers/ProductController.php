@@ -1,127 +1,81 @@
 <?php
-class AuthController {
-    private User $user;
+class ProductController {
+    private Product $product;
+    private ExchangeRateService $exchangeService;
 
     public function __construct() {
-        $this->user = new User();
+        $this->product         = new Product();
+        $this->exchangeService = new ExchangeRateService();
     }
 
-    public function register(): void {
-        $data = json_decode(file_get_contents('php://input'), true);
+    public function index(): void {
+        $filters   = [
+            'category' => $_GET['category'] ?? null,
+            'search'   => $_GET['search']   ?? null,
+        ];
+        $currency  = $_GET['currency'] ?? 'USD';
+        $products  = $this->product->findAll($filters);
+        $rate      = $this->exchangeService->getRate('USD', $currency);
 
-        if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
-            Response::error('Preencha todos os campos.');
-            return;
+        foreach ($products as &$p) {
+            $p['price_converted'] = round($p['price'] * $rate, 2);
+            $p['currency']        = $currency;
         }
 
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            Response::error('Email inválido.');
-            return;
-        }
-
-        if (strlen($data['password']) < 6) {
-            Response::error('A password deve ter pelo menos 6 caracteres.');
-            return;
-        }
-
-        if ($this->user->emailExists($data['email'])) {
-            Response::error('Este email já está registado.');
-            return;
-        }
-
-        $id = $this->user->create([
-            'name'          => $data['name'],
-            'email'         => $data['email'],
-            'password_hash' => AuthService::hashPassword($data['password']),
-            'role'          => 'customer'
-        ]);
-
-        $user  = $this->user->findById($id);
-        $token = AuthService::generateToken([
-            'id'    => $user['id'],
-            'email' => $user['email'],
-            'role'  => $user['role'],
-            'name'  => $user['name']
-        ]);
-
-        Response::success(['token' => $token, 'user' => $user], 'Conta criada com sucesso!');
+        Response::success($products);
     }
 
-    public function login(): void {
-        $data = json_decode(file_get_contents('php://input'), true);
+    public function show(string $id): void {
+        $product = $this->product->findById((int) $id);
 
-        if (empty($data['email']) || empty($data['password'])) {
-            Response::error('Email e password são obrigatórios.');
-            return;
-        }
-
-        $user = $this->user->findByEmail($data['email']);
-
-        if (!$user || !AuthService::verifyPassword($data['password'], $user['password_hash'])) {
-            Response::error('Email ou password incorrectos.', 401);
-            return;
-        }
-
-        $token = AuthService::generateToken([
-            'id'    => $user['id'],
-            'email' => $user['email'],
-            'role'  => $user['role'],
-            'name'  => $user['name']
-        ]);
-
-        unset($user['password_hash']);
-        Response::success(['token' => $token, 'user' => $user], 'Login realizado com sucesso!');
-    }
-
-    public function forgotPassword(): void {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        if (empty($data['email'])) {
-            Response::error('Email é obrigatório.');
-            return;
-        }
-
-        $user = $this->user->findByEmail($data['email']);
-
-        if (!$user) {
-            Response::success([], 'Se o email existir, receberá instruções.');
-            return;
-        }
-
-        $token = AuthService::generateResetToken();
-        $this->user->updateResetToken($data['email'], $token);
-
-        Response::success(['reset_token' => $token], 'Token de recuperação gerado.');
-    }
-
-    public function resetPassword(): void {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        if (empty($data['token']) || empty($data['password'])) {
-            Response::error('Token e password são obrigatórios.');
-            return;
-        }
-
-        $user = $this->user->findByResetToken($data['token']);
-
-        if (!$user) {
-            Response::error('Token inválido ou expirado.');
-            return;
-        }
-
-        $this->user->updatePassword($user['id'], AuthService::hashPassword($data['password']));
-        Response::success([], 'Password alterada com sucesso!');
-    }
-
-    public function me(): void {
-        $payload = AuthMiddleware::verify();
-        $user    = $this->user->findById($payload['id']);
-
-        if (!$user) {
+        if (!$product) {
             Response::notFound();
             return;
         }
 
-        Response::success($user);
+        Response::success($product);
+    }
+
+    public function store(): void {
+        AuthMiddleware::verifyAdmin();
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($data['name']) || empty($data['price']) || empty($data['category'])) {
+            Response::error('Nome, preço e categoria são obrigatórios.');
+            return;
+        }
+
+        $id = $this->product->create($data);
+        Response::success(['id' => $id], 'Produto criado com sucesso!');
+    }
+
+    public function update(string $id): void {
+        AuthMiddleware::verifyAdmin();
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (!$this->product->findById((int) $id)) {
+            Response::notFound();
+            return;
+        }
+
+        $this->product->update((int) $id, $data);
+        Response::success([], 'Produto actualizado com sucesso!');
+    }
+
+    public function destroy(string $id): void {
+        AuthMiddleware::verifyAdmin();
+
+        if (!$this->product->findById((int) $id)) {
+            Response::notFound();
+            return;
+        }
+
+        $this->product->delete((int) $id);
+        Response::success([], 'Produto removido com sucesso!');
+    }
+
+    public function categories(): void {
+        $categories = $this->product->getCategories();
+        Response::success($categories);
     }
 }
