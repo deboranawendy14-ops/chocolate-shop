@@ -166,3 +166,26 @@
   }
   .menu-toggle { display: flex; }
 }
+
+.navbar__username {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 0 8px;
+}
+
+.cart-count {
+  background: #e74c3c;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 20px;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+}
+
+.icon-btn {
+  position: relative;
+}

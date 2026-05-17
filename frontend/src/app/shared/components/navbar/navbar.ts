@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-navbar',
@@ -15,12 +16,15 @@ export class NavbarComponent implements OnInit {
   isMenuOpen = signal(false);
   cartCount = signal(0);
 
+  constructor(public authService: AuthService) {}
+
   translations: Record<string, Record<string, string>> = {
     pt: {
       home: 'Início',
       catalog: 'Produtos',
       categories: 'Categorias',
       orders: 'Pedidos',
+      stock: 'Stock',
       login: 'Entrar',
       logout: 'Sair',
       register: 'Registar',
@@ -31,6 +35,7 @@ export class NavbarComponent implements OnInit {
       catalog: 'Products',
       categories: 'Categories',
       orders: 'Orders',
+      stock: 'Stock',
       login: 'Login',
       logout: 'Sign Out',
       register: 'Register',
@@ -44,7 +49,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    const savedLang = localStorage.getItem('lang') as 'pt' | 'en' | null;
+    const savedLang  = localStorage.getItem('lang') as 'pt' | 'en' | null;
     if (savedTheme === 'dark') {
       this.isDarkTheme.set(true);
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -67,5 +72,9 @@ export class NavbarComponent implements OnInit {
 
   toggleMenu(): void {
     this.isMenuOpen.set(!this.isMenuOpen());
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
