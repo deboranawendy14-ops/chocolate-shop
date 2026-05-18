@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { AuthService } from '../../../core/services/auth';
+import { CartService } from '../../../core/services/cart';
 
 @Component({
   selector: 'app-navbar',
@@ -14,15 +15,16 @@ export class NavbarComponent implements OnInit {
   isDarkTheme = signal(false);
   currentLang = signal<'pt' | 'en'>('pt');
   isMenuOpen = signal(false);
-  cartCount = signal(0);
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    public cartService: CartService
+  ) {}
 
   translations: Record<string, Record<string, string>> = {
     pt: {
       home: 'Início',
       catalog: 'Produtos',
-      categories: 'Categorias',
       orders: 'Pedidos',
       stock: 'Stock',
       login: 'Entrar',
@@ -33,7 +35,6 @@ export class NavbarComponent implements OnInit {
     en: {
       home: 'Home',
       catalog: 'Products',
-      categories: 'Categories',
       orders: 'Orders',
       stock: 'Stock',
       login: 'Login',

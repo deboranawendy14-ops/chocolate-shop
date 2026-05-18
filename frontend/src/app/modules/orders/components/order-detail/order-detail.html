@@ -1,0 +1,56 @@
+<div class="order-detail-page">
+  <div class="order-detail-page__container">
+
+    <a routerLink="/orders" class="btn-back">← Voltar aos pedidos</a>
+
+    <!-- LOADING -->
+    <div class="order-loading" *ngIf="isLoading()">
+      <p>A carregar pedido...</p>
+    </div>
+
+    <!-- ERRO -->
+    <div class="order-error" *ngIf="error()">
+      <p>{{ error() }}</p>
+    </div>
+
+    <!-- DETALHE -->
+    <div class="order-detail" *ngIf="order() && !isLoading()">
+
+      <div class="order-detail__header">
+        <div>
+          <h1>Pedido #{{ order()!.id }}</h1>
+          <p class="order-detail__date">{{ order()!.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <span class="order-detail__status" [class]="getStatusClass(order()!.status)">
+          {{ getStatusLabel(order()!.status) }}
+        </span>
+      </div>
+
+      <!-- ITENS -->
+      <div class="order-detail__items">
+        <h2>Produtos</h2>
+        <div class="order-item" *ngFor="let item of order()!.items">
+          <div class="order-item__image">
+            <img [src]="item.image_url" [alt]="item.name" [title]="item.name">
+          </div>
+          <div class="order-item__info">
+            <h3>{{ item.name }}</h3>
+            <p>Quantidade: {{ item.quantity }}</p>
+          </div>
+          <div class="order-item__price">
+            € {{ (item.unit_price * item.quantity).toFixed(2) }}
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMO -->
+      <div class="order-detail__summary">
+        <div class="summary-row">
+          <span>Total</span>
+          <span class="summary-total">€ {{ order()!.total_usd }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

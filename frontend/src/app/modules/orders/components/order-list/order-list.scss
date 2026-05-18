@@ -1,0 +1,125 @@
+.orders-page {
+  background: var(--bg-primary);
+  min-height: calc(100vh - 68px);
+  padding: 48px 32px;
+
+  &__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+  }
+}
+
+.orders-loading,
+.orders-error,
+.orders-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+
+  svg { margin-bottom: 20px; opacity: 0.3; }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 24px; }
+
+  .btn-primary {
+    display: inline-flex;
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: var(--shadow-hover); }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__id {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  &__date {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  &__status {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  &__total {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--choc-caramel);
+  }
+}
+
+.status--pending    { background: rgba(241,196,15,0.15);  color: #f39c12; }
+.status--processing { background: rgba(52,152,219,0.15);  color: #2980b9; }
+.status--shipped    { background: rgba(155,89,182,0.15);  color: #8e44ad; }
+.status--delivered  { background: rgba(39,174,96,0.15);   color: #27ae60; }
+.status--cancelled  { background: rgba(231,76,60,0.15);   color: #e74c3c; }
+
+.btn-details {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--choc-caramel);
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.75; }
+}
+
+@media (max-width: 768px) {
+  .orders-page { padding: 24px 16px; }
+}
